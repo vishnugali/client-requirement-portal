@@ -1,0 +1,14 @@
+/* Biofactor Green Theme – overrides only colors */
+
+body.biofactor-theme {
+  --primary: #0e3b2e;
+  --secondary: #145a32;
+  --accent: #2ecc71;
+  --background: #071f14;
+  --card-bg: #0f2f22;
+}
+
+/* Optional safety */
+body.biofactor-theme * {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
