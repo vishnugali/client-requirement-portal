@@ -1,91 +1,160 @@
+/* ===============================
+   ADMIN LOGIN – FINAL CSS
+   =============================== */
+
 .login-page {
   min-height: 100vh;
-  background-color: #071a2f;
+  background:
+    radial-gradient(circle at 20% 15%, #123c66 0%, transparent 42%),
+    radial-gradient(circle at 80% 85%, #0f2f52 0%, transparent 48%),
+    linear-gradient(180deg, #050e1b, #071a2f);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
+
+/* ===============================
+   LOGIN CARD
+   =============================== */
 
 .login-card {
-  background-color: #0d2a42;
-  padding: 50px 55px;
   width: 420px;
-  border-radius: 18px;
-  border: 1px solid #1f3d5a;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  padding: 52px 56px;
+  border-radius: 22px;
+  backdrop-filter: blur(14px);
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.03)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.7);
+  position: relative;
+  overflow: hidden;
 }
 
+/* subtle inner highlight */
+.login-card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 20px;
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.06),
+      transparent
+  );
+  pointer-events: none;
+}
+
+/* ===============================
+   BRAND / TITLE
+   =============================== */
+
 .brand {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
   color: #ffffff;
   text-align: center;
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  text-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
 }
 
 .login-subtitle {
+  font-size: 14.5px;
+  font-weight: 400;
+  color: #a9bdd3;
   text-align: center;
-  color: #9fb3c8;
-  margin-bottom: 35px;
-  font-size: 14px;
+  margin-bottom: 42px;
+  line-height: 1.6;
 }
+
+/* ===============================
+   INPUTS
+   =============================== */
 
 .input-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 .input-group label {
-  color: #9fb3c8;
   font-size: 13px;
+  font-weight: 500;
+  color: #9fb4cc;
   margin-bottom: 6px;
+  letter-spacing: 0.2px;
 }
 
 .input-group input {
-  background-color: #071a2f;
-  border: 1px solid #1f3d5a;
-  padding: 12px 14px;
-  border-radius: 10px;
+  background: rgba(5, 14, 27, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 13px 14px;
+  border-radius: 12px;
   color: #ffffff;
   font-size: 14px;
   outline: none;
+  transition: all 0.25s ease;
+}
+
+.input-group input::placeholder {
+  color: #6f86a0;
 }
 
 .input-group input:focus {
-  border-color: #1e90ff;
+  border-color: #4aa3ff;
+  box-shadow: 0 0 0 3px rgba(74, 163, 255, 0.15);
 }
+
+/* ===============================
+   LOGIN BUTTON
+   =============================== */
 
 .login-btn {
   width: 100%;
-  padding: 13px;
-  background-color: #1e90ff;
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 12px;
   border: none;
-  border-radius: 10px;
+  background: linear-gradient(180deg, #4aa3ff, #1e78d6);
   color: #ffffff;
   font-size: 15px;
   font-weight: 600;
+  letter-spacing: 0.3px;
   cursor: pointer;
-  transition: background 0.25s ease;
-  margin-top: 10px;
+  transition: all 0.3s ease;
 }
 
 .login-btn:hover {
-  background-color: #1677d9;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 35px rgba(30, 120, 214, 0.5);
 }
 
+.login-btn:active {
+  transform: translateY(0);
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+
 .login-footer {
-  margin-top: 25px;
+  margin-top: 30px;
   text-align: center;
   font-size: 13px;
   color: #9fb3c8;
 }
 
-/* ===== ADMIN DIFFERENTIATION ===== */
+/* ===============================
+   ADMIN EMPHASIS
+   =============================== */
 
 .login-card.admin {
-  border: 1px solid #2f6ea5;
+  border-color: rgba(74, 163, 255, 0.45);
 }
 
 .admin-sub {
@@ -93,9 +162,24 @@
 }
 
 .admin-btn {
-  background-color: #2f6ea5;
+  background: linear-gradient(180deg, #5aaeff, #2f6ea5);
 }
 
 .admin-btn:hover {
-  background-color: #245d8c;
+  box-shadow: 0 14px 40px rgba(47, 110, 165, 0.6);
+}
+
+/* ===============================
+   MOBILE
+   =============================== */
+
+@media (max-width: 480px) {
+  .login-card {
+    width: 92%;
+    padding: 46px 36px;
+  }
+
+  .brand {
+    font-size: 30px;
+  }
 }

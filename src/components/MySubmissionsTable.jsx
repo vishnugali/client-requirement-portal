@@ -39,7 +39,8 @@ export default function MySubmissionsTable({ userId }) {
   }
 
   return (
-    <div className="table-card">
+    // ✅ THIS LINE FIXES EVERYTHING
+    <div className="table-card submissions-card">
       <h3 className="table-title">My Submissions</h3>
 
       <table className="submissions-table">
@@ -58,9 +59,7 @@ export default function MySubmissionsTable({ userId }) {
               <td className="title-cell">{row.title}</td>
 
               <td>
-                <span
-                  className={`status-badge ${row.status.toLowerCase()}`}
-                >
+                <span className={`status-badge ${row.status.toLowerCase()}`}>
                   {row.status}
                 </span>
               </td>

@@ -1,20 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 /* ===============================
-   BIOFACTOR DARK GREEN THEME
+   GLOBAL RESET & TYPOGRAPHY
 ================================ */
 
-body.biofactor-theme {
-  background: radial-gradient(
-      circle at 20% 20%,
-      rgba(31, 122, 77, 0.08),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 80% 80%,
-      rgba(31, 122, 77, 0.08),
-      transparent 40%
-    ),
-    #ffffff;
-  color: #ffffff;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+body {
+  background: #f4f6fb;
+  color: #1f2937;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.loading {
+  font-size: 20px;
+  text-align: center;
+  padding: 100px 0;
 }
 
 /* ===============================
@@ -27,48 +33,72 @@ body.biofactor-theme {
 }
 
 /* ===============================
-   SIDEBAR
+   SIDEBAR (COMMON)
 ================================ */
 
 .sidebar {
   width: 260px;
-  background: linear-gradient(180deg, #0e3b27, #1f7a4d);
   padding: 26px 20px;
   display: flex;
   flex-direction: column;
 }
 
-.logo {
-  color: #ffffff;
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 40px;
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-.sidebar nav button {
+.sidebar-nav button {
   width: 100%;
   padding: 12px 16px;
-  margin-bottom: 10px;
   background: transparent;
-  color: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   text-align: left;
   cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 
-.sidebar nav button:hover {
+.sidebar-nav button:hover {
   background: rgba(255, 255, 255, 0.15);
 }
 
 .logout {
   margin-top: auto;
   padding: 14px;
-  background: #c0392b;
-  color: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  background: #dc2626;
+  color: #ffffff;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s;
+}
+
+.logout:hover {
+  background: #b91c1c;
+}
+
+/* ===============================
+   SIDEBAR LOGO
+================================ */
+
+.sidebar-logo,
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.sidebar-logo img,
+.logo-container img {
+  width: 140px;
+  height: auto;
+  object-fit: contain;
 }
 
 /* ===============================
@@ -87,76 +117,77 @@ body.biofactor-theme {
 
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 22px;
 }
 
 .kpi-card {
-  background: linear-gradient(145deg, #0f4d34, #1f7a4d);
   padding: 26px;
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
 }
 
 .kpi-card span {
-  font-size: 14px;
-  color: #ffffff;
-  opacity: 0.9;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 .kpi-card h1 {
-  font-size: 38px;
-  margin-top: 10px;
-  color: #ffffff;
+  font-size: 36px;
+  margin-top: 8px;
+  font-weight: 700;
 }
 
 /* ===============================
-   GRAPH CARD
+   CARDS (GRAPH, FORM, TABLE)
 ================================ */
 
-.graph-card {
-  margin-top: 36px;
-  background: linear-gradient(145deg, #0f4d34, #1f7a4d);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-}
-
-.graph-card h3 {
-  color: #ffffff;
-  margin-bottom: 20px;
-}
-
-/* ===============================
-   NEW SUBMISSION
-================================ */
-
-.form-card {
-  background: linear-gradient(145deg, #0f4d34, #1f7a4d);
-  padding: 36px;
+.graph-card,
+.form-card,
+.table-card {
+  margin-top: 30px;
+  padding: 28px;
   border-radius: 22px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
 }
+
+.graph-card:hover,
+.form-card:hover,
+.table-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ===============================
+   FORMS
+================================ */
 
 .form-card h2 {
-  color: #ffffff;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: inherit;
 }
 
 .form-card input,
 .form-card textarea {
   width: 100%;
-  margin-bottom: 16px;
   padding: 14px;
-  border-radius: 10px;
+  margin-bottom: 16px;
+  border-radius: 12px;
   border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
+  font-size: 14px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .form-card input::placeholder,
 .form-card textarea::placeholder {
-  color: #e0e0e0;
+  opacity: 0.6;
 }
 
 .form-card button {
@@ -164,26 +195,15 @@ body.biofactor-theme {
   padding: 15px;
   border-radius: 14px;
   border: none;
-  background: #ffffff;
-  color: #1f7a4d;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 /* ===============================
-   MY SUBMISSIONS TABLE
+   TABLE
 ================================ */
-
-.table-card {
-  background: linear-gradient(145deg, #0f4d34, #1f7a4d);
-  padding: 28px;
-  border-radius: 22px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
-}
-
-.table-card h2 {
-  color: #ffffff;
-}
 
 table {
   width: 100%;
@@ -191,211 +211,462 @@ table {
 }
 
 th {
-  color: #ffffff;
-  padding: 14px;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 14px;
+  font-size: 13px;
 }
 
 td {
-  color: #ffffff;
-  padding: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-tr:hover td {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* ===============================
-   STATUS BADGES
-================================ */
-
-.status-pending,
-.status-ongoing,
-.status-completed {
-  color: #ffffff;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-}
-
-/* ===============================
-   MISC
-================================ */
-
-.placeholder,
-.loading {
-  color: #ffffff;
-}
-/* ===============================
-   BIOFACTOR LOGO (SIDEBAR)
-================================ */
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 36px;
-}
-
-.logo-container img {
-  max-width: 160px;
-  max-height: 60px;
-  object-fit: contain;
-}
-/* =====================================
-   MY SUBMISSIONS TABLE – PROFESSIONAL
-===================================== */
-
-.table-card {
-  margin-top: 30px;
-  padding: 28px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #0b3d2e, #0f5132);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-}
-
-.table-title {
-  color: #ffffff;
-  margin-bottom: 18px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.submissions-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.submissions-table th {
-  text-align: left;
-  padding-bottom: 14px;
-  color: #ffffff;
-  font-size: 13px;
-  opacity: 0.9;
-}
-
-.submissions-table td {
   padding: 14px 0;
-  color: #ffffff;
   font-size: 14px;
 }
 
-.submissions-table tr {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+tr {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* TITLE & DATE */
-.title-cell,
-.date-cell {
-  color: #ffffff;
-}
-
-/* DOWNLOAD LINK */
-.download-link {
-  color: #a7f3d0;
-  font-weight: 500;
-  text-decoration: underline;
-}
-
-/* =====================================
+/* ===============================
    STATUS BADGES
-===================================== */
+================================ */
 
 .status-badge {
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
-  text-transform: uppercase;
   display: inline-block;
+  text-transform: uppercase;
 }
 
-/* PENDING */
+/* ===============================
+   BIOFACTOR THEME – GREEN
+================================ */
+
+body.biofactor-theme {
+  background: #f5faf7;
+  color: #1f2937;
+}
+
+body.biofactor-theme .sidebar {
+  background: linear-gradient(180deg, #0f3d2e, #14532d);
+}
+
+body.biofactor-theme .kpi-card,
+body.biofactor-theme .graph-card,
+body.biofactor-theme .form-card,
+body.biofactor-theme .table-card {
+  background: #ffffff;
+  border: 1px solid #e5efe9;
+  color: #0f3d2e;
+  box-shadow: 0 18px 42px rgba(15, 61, 46, 0.12);
+}
+
+body.biofactor-theme .kpi-card span {
+  color: #6b7280;
+}
+
+body.biofactor-theme .kpi-card h1 {
+  color: #0f3d2e;
+}
+
+body.biofactor-theme th {
+  color: #14532d;
+}
+
+body.biofactor-theme td {
+  color: #374151;
+}
+
+body.biofactor-theme input,
+body.biofactor-theme textarea {
+  background: #f0f7f4;
+  color: #1f2937;
+}
+
+body.biofactor-theme button {
+  background: #14532d;
+  color: #ffffff;
+}
+
+/* ===============================
+   DD YADHAGIRI THEME – VIOLET/YELLOW
+================================ */
+
+body.ddyadhagiri-theme {
+  background: #f8f7fc;
+  color: #1f2937;
+}
+
+body.ddyadhagiri-theme .sidebar {
+  background: linear-gradient(180deg, #4c1d95, #2e1065);
+}
+
+body.ddyadhagiri-theme .kpi-card,
+body.ddyadhagiri-theme .graph-card,
+body.ddyadhagiri-theme .form-card,
+body.ddyadhagiri-theme .table-card {
+  background: #ffffff;
+  border: 1px solid #ede9fe;
+  color: #2e1065;
+  box-shadow: 0 18px 42px rgba(76, 29, 149, 0.14);
+}
+
+body.ddyadhagiri-theme .kpi-card span {
+  color: #6b7280;
+}
+
+body.ddyadhagiri-theme .kpi-card h1 {
+  color: #4c1d95;
+}
+
+body.ddyadhagiri-theme th {
+  color: #4c1d95;
+}
+
+body.ddyadhagiri-theme td {
+  color: #374151;
+}
+
+body.ddyadhagiri-theme button {
+  background: linear-gradient(135deg, #fde047, #facc15);
+  color: #000000;
+}
+
+/* ===============================
+   STATUS COLORS
+================================ */
+
 .status-badge.pending {
-  background-color: #facc15;
+  background: #fde047;
   color: #000;
 }
 
-/* ONGOING */
 .status-badge.ongoing {
-  background-color: #38bdf8;
+  background: #93c5fd;
   color: #000;
 }
 
-/* COMPLETED */
 .status-badge.completed {
-  background-color: #22c55e;
+  background: #86efac;
   color: #000;
 }
 
-/* 🔴 REJECTED */
 .status-badge.rejected {
-  background-color: #ef4444;
-  color: #000;
+  background: #ef4444;
+  color: #fff;
 }
-/* =====================================
-   ADMIN SIDEBAR COMPANY LOGO
-===================================== */
+/* ===============================
+   SETTINGS – SUPPORT & HELP
+================================ */
 
-.sidebar-logo {
+.settings-card {
+  max-width: 520px;
+  padding: 28px;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.08);
+}
+
+.settings-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.settings-card .muted {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 22px;
+}
+
+/* SUPPORT ITEMS */
+
+.support-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  background: #f9fafb;
+}
+
+/* SUPPORT BUTTON */
+
+.support-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 18px;
+  border-radius: 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ===============================
+   THEME OVERRIDES
+================================ */
+
+/* BIOFACTOR */
+
+body.biofactor-theme .settings-card {
+  border: 1px solid #e5efe9;
+}
+
+body.biofactor-theme .support-item {
+  background: #f0f7f4;
+  color: #14532d;
+}
+
+body.biofactor-theme .support-btn {
+  background: #14532d;
+  color: #ffffff;
+}
+
+/* DD YADHAGIRI */
+
+body.ddyadhagiri-theme .settings-card {
+  border: 1px solid #ede9fe;
+}
+
+body.ddyadhagiri-theme .support-item {
+  background: #f5f3ff;
+  color: #4c1d95;
+}
+
+body.ddyadhagiri-theme .support-btn {
+  background: linear-gradient(135deg, #fde047, #facc15);
+  color: #000000;
+}
+
+/* =========================
+   SETTINGS / SUPPORT PANEL
+========================= */
+.settings-card {
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 28px 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.settings-card h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.settings-card .muted {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 22px;
+}
+
+.support-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 36px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  background: #f9fafb;
+  font-size: 15px;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
 }
 
-.sidebar-logo img {
-  width: 38px;
-  height: 38px;
-  object-fit: contain;
+.support-item span {
+  font-weight: 500;
+}
+/* ======================================
+   MY SUBMISSIONS – PROFESSIONAL TABLE UI
+   (SAFE OVERRIDE – PASTE AT BOTTOM)
+====================================== */
+
+.submissions-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 26px 28px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
 }
 
-.sidebar-logo span {
-  font-size: 20px;
+/* TABLE WRAPPER */
+.submissions-card table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 14px;
+}
+
+/* HEADER */
+.submissions-card th {
+  font-size: 13px;
   font-weight: 600;
-  color: #ffffff;
-}
-/* =====================================
-   ADMIN SIDEBAR LARGE LOGO
-===================================== */
-
-.sidebar-logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 40px;
+  color: #6b7280;
+  padding: 10px 14px;
+  text-transform: uppercase;
 }
 
-.sidebar-logo img {
-  width: 140px;       /* BIG LOGO */
-  height: auto;
-  object-fit: contain;
-}
-/* ============================= */
-/* DD YADHAGIRI THEME */
-/* ============================= */
-
-body.ddyadhagiri {
-  --primary: #7c3aed;     /* violet */
-  --secondary: #fde047;   /* yellow */
-  --bg-dark: #1e1b2e;
-  --card-bg: #2a2540;
-  --text-main: #ffffff;
+/* ROW */
+.submissions-card tbody tr {
+  background: #f9fafb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-body.ddyadhagiri .sidebar {
-  background: linear-gradient(180deg, #7c3aed, #4c1d95);
+.submissions-card tbody tr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
-body.ddyadhagiri .kpi-card {
-  background: linear-gradient(135deg, #fde047, #7c3aed);
-  color: #000;
+/* CELL */
+.submissions-card td {
+  padding: 16px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
 }
 
-body.ddyadhagiri .graph-card,
-body.ddyadhagiri .form-card {
-  background: #2a2540;
-  color: #ffffff;
+.submissions-card tbody tr td:first-child {
+  border-radius: 12px 0 0 12px;
+}
+
+.submissions-card tbody tr td:last-child {
+  border-radius: 0 12px 12px 0;
+}
+
+/* STATUS BADGES */
+.submissions-card .status-badge {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+/* STATUS COLORS */
+.submissions-card .status-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.submissions-card .status-badge.ongoing {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+.submissions-card .status-badge.completed {
+  background: #dcfce7;
+  color: #14532d;
+}
+
+.submissions-card .status-badge.rejected {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+/* BIOFACTOR THEME OVERRIDE */
+body.biofactor-theme .submissions-card tbody tr {
+  background: #f0f7f4;
+}
+
+/* DD YADHAGIRI THEME OVERRIDE */
+body.ddyadhagiri-theme .submissions-card tbody tr {
+  background: #f5f3ff;
+}
+/* ======================================
+   KPI CARDS – HIGH END SAAS UPGRADE
+   (Paste at bottom – overrides safely)
+====================================== */
+
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 28px 26px;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0)),
+    #ffffff;
+
+  border: 1px solid rgba(0,0,0,0.06);
+
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* subtle lift */
+.kpi-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 26px 60px rgba(0,0,0,0.16),
+    inset 0 1px 0 rgba(255,255,255,0.65);
+}
+
+/* glow strip */
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* typography */
+.kpi-card span {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.kpi-card h1 {
+  font-size: 40px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+/* ======================================
+   KPI STATUS COLORS
+====================================== */
+
+/* Pending */
+.kpi-card:nth-child(2)::before {
+  background: linear-gradient(135deg, #fde047, transparent 60%);
+}
+.kpi-card:nth-child(2) h1 {
+  color: #92400e;
+}
+
+/* Ongoing */
+.kpi-card:nth-child(3)::before {
+  background: linear-gradient(135deg, #93c5fd, transparent 60%);
+}
+.kpi-card:nth-child(3) h1 {
+  color: #1e3a8a;
+}
+
+/* Completed */
+.kpi-card:nth-child(4)::before {
+  background: linear-gradient(135deg, #86efac, transparent 60%);
+}
+.kpi-card:nth-child(4) h1 {
+  color: #14532d;
+}
+
+/* Rejected */
+.kpi-card.rejected::before {
+  background: linear-gradient(135deg, #ef4444, transparent 60%);
+}
+.kpi-card.rejected h1 {
+  color: #7f1d1d;
 }

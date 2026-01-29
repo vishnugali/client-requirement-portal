@@ -1,24 +1,18 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { supabase } from "../supabase";
 import "../styles/dashboard.css";
 import MySubmissionsTable from "../components/MySubmissionsTable";
 
-import {
-  PieChart,
-  Pie,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function ClientDashboard() {
   const navigate = useNavigate();
 
-  /* =========================
-     STATE
-  ========================= */
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [clientTheme, setClientTheme] = useState("");
+  const [clientName, setClientName] = useState("");
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -30,12 +24,11 @@ export default function ClientDashboard() {
     pending: 0,
     ongoing: 0,
     completed: 0,
+    rejected: 0,
   });
 
-  const [clientName, setClientName] = useState("");
-
   /* =========================
-     APPLY CLIENT THEME + NAME
+     APPLY THEME + CLIENT NAME
   ========================= */
   useEffect(() => {
     const theme = localStorage.getItem("clientTheme");
@@ -43,51 +36,34 @@ export default function ClientDashboard() {
     document.body.className = "";
     if (theme) {
       document.body.classList.add(theme);
+      setClientTheme(theme);
     }
 
-    // 🔥 Map theme → client_name
-    if (theme === "biofactor") {
-      setClientName("biofactor");
-    } else if (theme === "ddyadhagiri") {
-      setClientName("ddyadhagiri");
-    }
+    if (theme === "biofactor-theme") setClientName("biofactor");
+    if (theme === "ddyadhagiri-theme") setClientName("ddyadhagiri");
   }, []);
 
   /* =========================
-     AUTH + REALTIME
+     AUTH
   ========================= */
   useEffect(() => {
     const init = async () => {
       const { data } = await supabase.auth.getUser();
 
       if (!data?.user) {
-        navigate("/client-login");
+        navigate("/"); // ✅ ROLE SELECTION PAGE
         return;
       }
 
       setUser(data.user);
       fetchStats(data.user.id);
-
-      supabase
-        .channel("client-dashboard")
-        .on(
-          "postgres_changes",
-          {
-            event: "*",
-            schema: "public",
-            table: "submissions",
-            filter: `client_id=eq.${data.user.id}`,
-          },
-          () => fetchStats(data.user.id)
-        )
-        .subscribe();
     };
 
     init();
   }, [navigate]);
 
   /* =========================
-     FETCH KPI DATA
+     FETCH KPI
   ========================= */
   const fetchStats = async (userId) => {
     const { data } = await supabase
@@ -99,14 +75,15 @@ export default function ClientDashboard() {
 
     setStats({
       total: data.length,
-      pending: data.filter(d => d.status === "pending").length,
-      ongoing: data.filter(d => d.status === "ongoing").length,
-      completed: data.filter(d => d.status === "completed").length,
+      pending: data.filter((d) => d.status === "pending").length,
+      ongoing: data.filter((d) => d.status === "ongoing").length,
+      completed: data.filter((d) => d.status === "completed").length,
+      rejected: data.filter(d => d.status === "rejected").length,
     });
   };
 
   /* =========================
-     SUBMIT REQUIREMENT
+     SUBMIT
   ========================= */
   const handleSubmit = async () => {
     if (!title || !file) {
@@ -115,52 +92,40 @@ export default function ClientDashboard() {
     }
 
     setSubmitting(true);
-
     const fileName = `${Date.now()}_${file.name}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from("client-files")
-      .upload(fileName, file);
-
-    if (uploadError) {
-      alert(uploadError.message);
-      setSubmitting(false);
-      return;
-    }
+    await supabase.storage.from("client-files").upload(fileName, file);
 
     const { data: fileData } = supabase.storage
       .from("client-files")
       .getPublicUrl(fileName);
 
-    const { error } = await supabase.from("submissions").insert({
+    await supabase.from("submissions").insert({
       client_id: user.id,
-      client_name: clientName, // ✅ PHASE-2 CORE CHANGE
+      client_name: clientName,
       title,
       description,
       file_url: fileData.publicUrl,
       status: "pending",
     });
 
-    if (error) {
-      alert(error.message);
-    } else {
-      setTitle("");
-      setDescription("");
-      setFile(null);
-      setActiveTab("dashboard");
-    }
+    await fetchStats(user.id);
 
+    setTitle("");
+    setDescription("");
+    setFile(null);
+    setActiveTab("dashboard");
     setSubmitting(false);
   };
 
   /* =========================
-     LOGOUT
+     LOGOUT (✅ FIXED)
   ========================= */
   const handleLogout = async () => {
     await supabase.auth.signOut();
     localStorage.removeItem("clientTheme");
     document.body.className = "";
-    navigate("/client-login");
+    navigate("/"); // ✅ ROLE SELECTION PAGE
   };
 
   if (!user) return <div className="loading">Loading...</div>;
@@ -169,6 +134,7 @@ export default function ClientDashboard() {
     { name: "Pending", value: stats.pending },
     { name: "Ongoing", value: stats.ongoing },
     { name: "Completed", value: stats.completed },
+    { name: "Rejected", value: stats.rejected },
   ];
 
   return (
@@ -176,13 +142,20 @@ export default function ClientDashboard() {
       {/* ================= SIDEBAR ================= */}
       <aside className="sidebar">
         <div className="logo-container">
-          <img src="/client-logo.png" alt="Client Logo" />
+          {clientTheme === "biofactor-theme" && (
+            <img src="/biofactor-logo.png" alt="Biofactor Logo" />
+          )}
+          {clientTheme === "ddyadhagiri-theme" && (
+            <img src="/ddyadhagiri-logo.png" alt="DD Yadhagiri Logo" />
+          )}
         </div>
 
         <nav className="sidebar-nav">
           <button onClick={() => setActiveTab("dashboard")}>Dashboard</button>
           <button onClick={() => setActiveTab("new")}>New Submission</button>
-          <button onClick={() => setActiveTab("submissions")}>My Submissions</button>
+          <button onClick={() => setActiveTab("submissions")}>
+            My Submissions
+          </button>
           <button onClick={() => setActiveTab("settings")}>Settings</button>
         </nav>
 
@@ -197,24 +170,25 @@ export default function ClientDashboard() {
           <>
             <div className="kpi-grid">
               <div className="kpi-card">
-                <span>Total Submissions</span>
+                <span>Total</span>
                 <h1>{stats.total}</h1>
               </div>
-
               <div className="kpi-card">
                 <span>Pending</span>
                 <h1>{stats.pending}</h1>
               </div>
-
               <div className="kpi-card">
                 <span>Ongoing</span>
                 <h1>{stats.ongoing}</h1>
               </div>
-
               <div className="kpi-card">
                 <span>Completed</span>
                 <h1>{stats.completed}</h1>
               </div>
+              <div className="kpi-card rejected">
+  <span>Rejected</span>
+  <h1>{stats.rejected}</h1>
+</div>
             </div>
 
             <div className="graph-card">
@@ -224,7 +198,6 @@ export default function ClientDashboard() {
                   <Pie
                     data={chartData}
                     dataKey="value"
-                    nameKey="name"
                     innerRadius={70}
                     outerRadius={110}
                   />
@@ -238,24 +211,20 @@ export default function ClientDashboard() {
         {activeTab === "new" && (
           <div className="form-card">
             <h2>Submit New Requirement</h2>
-
             <input
               placeholder="Project Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-
             <textarea
               placeholder="Project Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-
             <input
               type="file"
               onChange={(e) => setFile(e.target.files[0])}
             />
-
             <button onClick={handleSubmit} disabled={submitting}>
               {submitting ? "Submitting..." : "Submit Requirement"}
             </button>
@@ -267,7 +236,25 @@ export default function ClientDashboard() {
         )}
 
         {activeTab === "settings" && (
-          <div className="placeholder">Settings (Coming soon)</div>
+          <div className="settings-card">
+            <h2>Support & Help</h2>
+            <p className="muted">
+              For any assistance regarding submissions or services, reach out to
+              us.
+            </p>
+
+            <div className="support-item">
+              📧 <span>support@cerevyn.com</span>
+            </div>
+
+            <div className="support-item">
+              📞 <span>+91 98765 43210</span>
+            </div>
+
+            <div className="support-item">
+              🕒 <span>Mon – Fri, 10:00 AM – 6:00 PM</span>
+            </div>
+          </div>
         )}
       </main>
     </div>

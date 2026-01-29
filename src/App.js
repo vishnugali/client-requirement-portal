@@ -8,13 +8,16 @@ import ClientDashboard from "./pages/ClientDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
-
-  // 🔥 STEP 4: Restore theme on refresh
   useEffect(() => {
-    const savedTheme = localStorage.getItem("clientTheme");
-    if (savedTheme === "biofactor") {
-      document.body.classList.add("biofactor-theme");
+    // ✅ Apply saved theme safely
+    const theme = localStorage.getItem("clientTheme");
+    if (theme && document.body) {
+      document.body.className = ""; // remove previous theme
+      document.body.classList.add(theme);
     }
+
+    // ✅ Make body visible after theme is applied
+    document.body.style.visibility = "visible";
   }, []);
 
   return (

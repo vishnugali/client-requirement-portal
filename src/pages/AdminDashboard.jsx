@@ -24,6 +24,7 @@ export default function AdminDashboard() {
     pending: 0,
     ongoing: 0,
     completed: 0,
+    rejected: 0
   });
 
   /* ======================
@@ -34,10 +35,11 @@ export default function AdminDashboard() {
     if (!data) return;
 
     setCounts({
-      pending: data.filter(s => s.status === "pending").length,
-      ongoing: data.filter(s => s.status === "ongoing").length,
-      completed: data.filter(s => s.status === "completed").length,
-    });
+  pending: data.filter(s => s.status === "pending").length,
+  ongoing: data.filter(s => s.status === "ongoing").length,
+  completed: data.filter(s => s.status === "completed").length,
+  rejected: data.filter(s => s.status === "rejected").length,
+});
   };
 
   /* ======================
@@ -77,9 +79,20 @@ export default function AdminDashboard() {
   /* ======================
      UPDATE STATUS
   ====================== */
-  const updateStatus = async (id, status) => {
-    await supabase.from("submissions").update({ status }).eq("id", id);
-  };
+ const updateStatus = async (id, status) => {
+  const { error } = await supabase
+    .from("submissions")
+    .update({ status })
+    .eq("id", id);
+
+  if (!error) {
+    setSubmissions(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, status } : item
+      )
+    );
+  }
+};
 
   /* ======================
      LOGOUT
@@ -92,11 +105,12 @@ export default function AdminDashboard() {
   /* ======================
      CHART DATA
   ====================== */
-  const pieData = [
-    { name: "Pending", value: counts.pending },
-    { name: "Ongoing", value: counts.ongoing },
-    { name: "Completed", value: counts.completed },
-  ];
+ const pieData = [
+  { name: "Pending", value: counts.pending },
+  { name: "Ongoing", value: counts.ongoing },
+  { name: "Completed", value: counts.completed },
+  { name: "Rejected", value: counts.rejected },
+];
 
   return (
     <div className="admin-container">
@@ -150,6 +164,10 @@ export default function AdminDashboard() {
                 <h3>Completed</h3>
                 <p>{counts.completed}</p>
               </div>
+                    <div className="overview-card rejected">
+        <h3>Rejected</h3>
+        <p>{counts.rejected}</p>
+      </div>
             </div>
 
             {/* ====== CHART SECTION ====== */}
@@ -208,7 +226,7 @@ export default function AdminDashboard() {
 
             <div className="client-list">
               <div
-                className="client-card"
+                className="client-card biofactor"
                 onClick={() => {
                   setSelectedClient("biofactor");
                   fetchClientSubmissions("biofactor");
@@ -218,7 +236,7 @@ export default function AdminDashboard() {
               </div>
 
               <div
-                className="client-card"
+                className="client-card ddyadhagiri"
                 onClick={() => {
                   setSelectedClient("ddyadhagiri");
                   fetchClientSubmissions("ddyadhagiri");
@@ -263,32 +281,40 @@ export default function AdminDashboard() {
                       </td>
                       <td>{s.status}</td>
                       <td className="actions">
-                        {s.status === "pending" && (
-                          <>
-                            <button
-                              className="accept"
-                              onClick={() => updateStatus(s.id, "ongoing")}
-                            >
-                              Accept
-                            </button>
-                            <button
-                              className="reject"
-                              onClick={() => updateStatus(s.id, "rejected")}
-                            >
-                              Reject
-                            </button>
-                          </>
-                        )}
+  {s.status === "pending" && (
+    <>
+      <button
+        className="accept"
+        onClick={() => updateStatus(s.id, "ongoing")}
+      >
+        Accept
+      </button>
+      <button
+        className="reject"
+        onClick={() => updateStatus(s.id, "rejected")}
+      >
+        Reject
+      </button>
+    </>
+  )}
 
-                        {s.status === "ongoing" && (
-                          <button
-                            className="complete"
-                            onClick={() => updateStatus(s.id, "completed")}
-                          >
-                            Complete
-                          </button>
-                        )}
-                      </td>
+  {s.status === "ongoing" && (
+    <button
+      className="complete"
+      onClick={() => updateStatus(s.id, "completed")}
+    >
+      Complete
+    </button>
+  )}
+
+  {s.status === "completed" && (
+    <span className="status-pill completed">Completed</span>
+  )}
+
+  {s.status === "rejected" && (
+    <span className="status-pill rejected">Rejected</span>
+  )}
+</td>
                     </tr>
                   ))}
 
