@@ -1,9 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { supabase } from "../supabase";
 
 export default function MySubmissionsTable({ userId }) {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const fetchSubmissions = useCallback(async () => {
+    if (!userId) return;
+
+    setLoading(true);
+
+    const { data, error } = await supabase
+      .from("submissions")
+      .select("*")
+      .eq("client_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (!error) setRows(data || []);
+    setLoading(false);
+  }, [userId]);
 
   useEffect(() => {
     fetchSubmissions();
@@ -18,28 +33,16 @@ export default function MySubmissionsTable({ userId }) {
       )
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
-  }, []);
-
-  async function fetchSubmissions() {
-    setLoading(true);
-
-    const { data, error } = await supabase
-      .from("submissions")
-      .select("*")
-      .eq("client_id", userId)
-      .order("created_at", { ascending: false });
-
-    if (!error) setRows(data || []);
-    setLoading(false);
-  }
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchSubmissions]);
 
   if (loading) {
     return <div className="loading">Loading submissions...</div>;
   }
 
   return (
-    // ✅ THIS LINE FIXES EVERYTHING
     <div className="table-card submissions-card">
       <h3 className="table-title">My Submissions</h3>
 
